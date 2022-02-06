@@ -12,9 +12,19 @@ export default function Gameboard() {
       };
     }
   }
-
+  const getSize = () => _size;
   const getState = (x, y) => _board[x][y].state;
   const getShip = (x, y) => _board[x][y].ship; // return reference of ship object
+  const getAvailableTargets = () => {
+      let targets = [];
+      for (let i = 0; i < _size; i += 1) {
+        for (let j = 0; j < _size; j += 1) {
+          if (getState(i, j) === 'blank') targets.push([i, j]);
+        }
+      }
+
+      return targets;
+  }
 
   const allSunk = () => {
     // returns true if all ships have been hit, false otherwise
@@ -69,11 +79,11 @@ export default function Gameboard() {
     } else {
       _board[x][y].state = 'miss';
     }
-
+ 
     return true;
   };
 
   return {
-    getState, getShip, allSunk, placeShip, isValidPlacement, receiveAttack,
+    getState, getShip, getSize, getAvailableTargets, allSunk, placeShip, isValidPlacement, receiveAttack,
   };
 }
