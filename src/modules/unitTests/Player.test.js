@@ -1,9 +1,9 @@
 import {
     describe, beforeEach, test, expect,
   } from '@jest/globals';
-import Gameboard from '../Gameboard';
-import Player from '../Player';
-import Ship from '../Ship';
+import Gameboard from '../Factory/Gameboard';
+import Player from '../Factory/Player';
+import Ship from '../Factory/Ship';
 
 describe('Player', () => {
     let user;
@@ -31,14 +31,20 @@ describe('Player', () => {
     });
 
     test('random attack', () => {
-        
         for (let i = 0; i < 100; i += 1) {
-            expect(user.sendRandomAttack(opponentBoard)).toBe(true);
+            expect(user.sendRandomAttack(opponentBoard)[0]).toBe(true);
         }
         expect(opponentBoard.allSunk()).toBe(true);
         expect(opponentBoard.getAvailableTargets()).toEqual([]);
-        
-    })
+    });
+
+    test('sink all ships', () => {
+        expect(user.sendAttack(3, 3, opponentBoard)).toBe(true);
+        expect(user.sendAttack(3, 4, opponentBoard)).toBe(true);
+        expect(user.sendAttack(3, 5, opponentBoard)).toBe(true);
+        expect(ship.isSunk()).toBe(true);
+        expect(opponentBoard.getQtySunk()).toBe(1);
+    });
 
 })
 

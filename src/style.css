@@ -1,3 +1,126 @@
-p {
-    color: red;
+@import url('https://fonts.googleapis.com/css2?family=Syncopate:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Kanit:wght@800&display=swap');
+
+body {
+    font-family: Syncopate;
+    font-weight: 700;
+    background-color: rgba(0, 0, 0, 0.801);
+    color: white;
+}
+header>h1 {
+    text-align: center;
+    font-size: 48px;
+    
+}
+
+.leftBoard, .rightBoard {
+    display: flex;
+    flex-direction: column;
+    margin: 25px;
+    padding: 15px;
+    border-radius: 15px;
+}
+
+.boardTitle {
+    text-align: center;
+}
+.board {
+    display: grid;
+    grid-template-rows: repeat(10, 1fr);
+    grid-template-columns: repeat(10, 1fr);
+    gap: 1px;
+    border-width: 1px;
+    border-style: solid;
+    margin: 20px 0px;
+    width: min-content;
+}
+.boardStatus {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+}
+.bold {
+    font-weight: 700;
+}
+.regular {
+    font-weight: 400;
+}
+
+.boardHighlight {
+    background-color:hsl(0, 0%, 38%);
+    transition: all 0.2s;
+}
+
+#gameBoardRow {
+    display: flex;
+    justify-content: center;
+}
+
+/* Square */
+
+.square {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: Kanit;
+    font-size: 32px;
+    width: 40px;
+    height: 40px;
+    line-height: 40px;
+    text-align: center;
+    border: 1px solid white;
+}
+.square > img {
+    color:blueviolet;
+    height: 85%;
+    width: 85%;
+}
+.ship {
+    background-color: rgb(11, 84, 145);
+}
+.hit {
+    color: rgb(255, 77, 77);
+    border-color: white;
+} 
+.miss {
+    color: white;
+}
+
+#endGameContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    
+}
+#endGameStatus {
+    margin: 10px 0px;
+}
+#restartGame {
+    font-family: inherit;
+    color: inherit;
+    padding: 5px 10px;
+    border: 1px solid white;
+    border-radius: 10px;
+    background-color: hsl(0, 0%, 38%);
+    box-shadow: 0px 0px 5px 1px rgb(255, 255, 255);
+}
+#restartGame:hover {
+    cursor: pointer;
+    font-weight: 700;
+    box-shadow: 0px 0px 5px 2px rgb(255, 255, 255);
+}
+.hidden {
+    visibility: hidden;
+}
+
+
+@media (max-width: 1000px) {
+    .leftBoard, .rightBoard {
+        margin: 20px;
+    }
+    #gameBoardRow {
+        flex-direction: column;
+        align-items: center;
+    }
 }

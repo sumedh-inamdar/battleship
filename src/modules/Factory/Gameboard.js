@@ -3,6 +3,7 @@ export default function Gameboard() {
   // [[col],[col],...]. [col] = [row 0, row 1, row 2]
   const _board = [...Array(_size)].map(() => Array(_size));
   const _ships = [];
+  const _shipLocations = [];
 
   for (let i = 0; i < _size; i += 1) {
     for (let j = 0; j < _size; j += 1) {
@@ -25,6 +26,9 @@ export default function Gameboard() {
 
       return targets;
   }
+  const getQtySunk = () => {
+    return _ships.reduce((prev, curr) => prev + (curr.isSunk() ? 1 : 0) , 0);
+  }
 
   const allSunk = () => {
     // returns true if all ships have been hit, false otherwise
@@ -35,7 +39,7 @@ export default function Gameboard() {
 
   const _coordIsWithinBoard = (x, y) => (x >= 0 && x < _size) && (y >= 0 && y < _size);
 
-  const _getArrayCoords = (shipLength, x, y, isVertical) => {
+  const getArrayCoords = (shipLength, x, y, isVertical) => {
     const arrayCoords = [];
     for (let i = 0; i < shipLength; i += 1) {
       const newX = x + (isVertical === false ? i : 0);
@@ -46,7 +50,7 @@ export default function Gameboard() {
   };
 
   const isValidPlacement = (shipLength, x, y, isVertical) => {
-    const placementCoords = _getArrayCoords(shipLength, x, y, isVertical);
+    const placementCoords = getArrayCoords(shipLength, x, y, isVertical);
 
     return placementCoords.every((xyCoords) => _coordIsWithinBoard(...xyCoords)
             && getShip(xyCoords[0], xyCoords[1]) === null);
@@ -57,10 +61,11 @@ export default function Gameboard() {
     // return false if (x, y) is off board or conflicts with existing ship
 
     if (isValidPlacement(ship.getLength(), x, y, isVertical)) {
-      _getArrayCoords(ship.getLength(), x, y, isVertical).forEach((xyCoords) => {
+      getArrayCoords(ship.getLength(), x, y, isVertical).forEach((xyCoords) => {
         _board[xyCoords[0]][xyCoords[1]].ship = ship;
-        _ships.push(ship);
       });
+      _ships.push(ship);
+      _shipLocations.push([x, y]);
       return true;
     }
     return false;
@@ -84,6 +89,6 @@ export default function Gameboard() {
   };
 
   return {
-    getState, getShip, getSize, getAvailableTargets, allSunk, placeShip, isValidPlacement, receiveAttack,
+    getState, getShip, getSize, getArrayCoords, getAvailableTargets, getQtySunk, allSunk, placeShip, isValidPlacement, receiveAttack, _shipLocations
   };
 }

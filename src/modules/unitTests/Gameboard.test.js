@@ -1,8 +1,8 @@
 import {
   describe, beforeEach, test, expect,
 } from '@jest/globals';
-import Gameboard from '../Gameboard';
-import Ship from '../Ship';
+import Gameboard from '../Factory/Gameboard';
+import Ship from '../Factory/Ship';
 
 describe('Gameboard', () => {
   let board;
@@ -141,6 +141,8 @@ describe('Gameboard', () => {
     const ship3 = Ship(2);
     board.placeShip(ship3, 1, 0, true);
 
+    expect(board.getQtySunk()).toBe(0);
+
     expect(board.receiveAttack(5, 9)).toBe(true);
     expect(board.receiveAttack(6, 9)).toBe(true);
     expect(board.receiveAttack(7, 9)).toBe(true);
@@ -148,14 +150,22 @@ describe('Gameboard', () => {
     expect(board.receiveAttack(9, 9)).toBe(true);
     expect(board.getShip(5, 9).isSunk()).toBe(true);
 
+    expect(board.getQtySunk()).toBe(1);
+
     expect(board.receiveAttack(0, 0)).toBe(true);
     expect(board.receiveAttack(0, 1)).toBe(true);
     expect(board.receiveAttack(0, 2)).toBe(true);
+    expect(board.getQtySunk()).toBe(1);
     expect(board.receiveAttack(0, 3)).toBe(true);
     expect(board.getShip(0, 3).isSunk()).toBe(true);
 
+    expect(board.getQtySunk()).toBe(2);
+
     expect(board.receiveAttack(1, 0)).toBe(true);
+    expect(board.getQtySunk()).toBe(2);
     expect(board.receiveAttack(1, 1)).toBe(true);
+    expect(board.getQtySunk()).toBe(3);
+
     expect(board.receiveAttack(3, 0)).toBe(true);
     expect(board.getShip(1, 0).isSunk()).toBe(true);
 
@@ -177,5 +187,6 @@ describe('Gameboard', () => {
 
     expect(board.getShip(5, 9).isSunk()).toBe(false);
     expect(board.allSunk()).toBe(false);
+    expect(board.getQtySunk()).toBe(0);
   });
 });
