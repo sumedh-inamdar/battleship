@@ -1,1 +1,32 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Battleship</title><script defer="defer" src="bundle.js?925ad77d7266391b4f7d"></script></head><body><p>a change</p></body></html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= htmlWebpackPlugin.options.title %></title>
+<script defer src="bundle.js"></script></head>
+<body>
+    <header>
+        <h1>Battleship</h1>
+    </header>
+    <div id="gameBoardRow">
+        <div class="leftBoard">
+            <div class="boardTitle"></div>
+            <div class="board"></div>
+            <div class="boardStatus"></div>
+        </div>
+        <div class ="rightBoard">
+            <div class="boardTitle"></div>
+            <div class="board"></div>
+            <div class="boardStatus"></div>
+        </div>
+    </div>
+    <div id="endGameContainer" class="hidden">
+        <div id="endGameStatus"></div>
+        <button id="restartGame">Play again</button>
+    </div>
+    
+    
+</body>
+</html>
