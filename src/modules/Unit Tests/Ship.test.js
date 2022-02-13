@@ -1,7 +1,7 @@
 import {
   describe, beforeEach, test, expect,
 } from '@jest/globals';
-import Ship from '../Ship';
+import Ship from '../Factory/Ship';
 
 describe('Ship', () => {
   let ship;

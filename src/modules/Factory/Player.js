@@ -1,15 +1,19 @@
 export default function Player(name) {
   let _name = name;
 
-  const getName = () => name;
+  function getName() {
+    return name;
+  }
 
-  const setName = (name) => (_name = name);
+  function setName(name) {
+    _name = name;
+  }
 
-  const sendAttack = (x, y, board) => {
+  function sendAttack(x, y, board) {
     return board.receiveAttack(x, y);
-  };
+  }
 
-  const sendRandomAttack = (board) => {
+  function sendRandomAttack(board) {
     const targets = board.getAvailableTargets();
     const targetLocation = targets[Math.floor(Math.random() * targets.length)];
 
@@ -17,7 +21,7 @@ export default function Player(name) {
       board.receiveAttack(targetLocation[0], targetLocation[1]),
       targetLocation,
     ];
-  };
+  }
 
   return { getName, setName, sendAttack, sendRandomAttack };
 }

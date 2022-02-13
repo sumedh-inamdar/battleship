@@ -1,4 +1,6 @@
 import './style.css';
-import { gameInit, startGame } from './modules/gameController';
+import { setupGame } from './Modules/Control/setup_controller.js';
+import { initiateShipPlacement } from './Modules/Control/shipPlacement_controller';
 
-gameInit();
+setupGame();
+initiateShipPlacement();

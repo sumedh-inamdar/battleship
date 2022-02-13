@@ -1,23 +1,32 @@
 export default function Ship(length, name) {
   if (length <= 0 || length > 10)
-    throw new Error("Length must be greater than 0");
+    throw new Error("Length must be greater than 0 and less than 11");
 
-  const hitLocation = []; // contains [x, y] locations
+  const _hitLocation = [];
 
-  // assumed valid hit location
-  const hit = (location) => {
-    if (hitLocation.includes(location)) throw new Error("Location already hit"); //can delete
-    hitLocation.push(location);
-  };
+  function hit(location) {
+    _hitLocation.push(location);
+  }
 
-  const getName = () => name;
-  const setName = (newName) => (name = newName);
+  function getName() { 
+    return name;
+  }
+  
+  function setName(newName) {
+    name = newName;
+  }
 
-  const getLength = () => length;
+  function getLength() {
+    return length;
+  }
 
-  const setLength = (num) => (length = num);
+  function setLength(num) {
+    length = num;
+  }
 
-  const isSunk = () => hitLocation.length === length;
+  function isSunk() {
+    return _hitLocation.length === length;
+  }
 
-  return { hit, getName, setName, getLength, setLength, isSunk, hitLocation };
+  return { hit, getName, setName, getLength, setLength, isSunk };
 }
