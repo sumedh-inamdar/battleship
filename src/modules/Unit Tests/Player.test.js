@@ -46,7 +46,32 @@ describe('Player', () => {
         expect(opponentBoard.getQtySunk()).toBe(1);
     });
 
-    test('get longest blank')
+    test('get longest blank - blank board', () => {
+        expect(user.getLongestBlank_X(0, 0, opponentBoard)).toBe(10);
+        expect(user.getLongestBlank_X(0, 9, opponentBoard)).toBe(10);
+        expect(user.getLongestBlank_X(9, 0, opponentBoard)).toBe(1);
+        expect(user.getLongestBlank_X(5, 5, opponentBoard)).toBe(5);
+
+        expect(user.getLongestBlank_Y(0, 0, opponentBoard)).toBe(10);
+        expect(user.getLongestBlank_Y(0, 9, opponentBoard)).toBe(1);
+        expect(user.getLongestBlank_Y(9, 0, opponentBoard)).toBe(10);
+        expect(user.getLongestBlank_Y(5, 5, opponentBoard)).toBe(5);
+    });
+
+    test('get longest blank - non-blank board', () => {
+        user.sendAttack(5, 0, opponentBoard);
+        expect(user.getLongestBlank_X(0, 0, opponentBoard)).toBe(5);
+        expect(user.getLongestBlank_X(3, 0, opponentBoard)).toBe(2);
+        expect(user.getLongestBlank_X(5, 0, opponentBoard)).toBe(0);
+
+        user.sendAttack(0, 5, opponentBoard);
+        expect(user.getLongestBlank_Y(0, 0, opponentBoard)).toBe(5);
+        expect(user.getLongestBlank_Y(0, 3, opponentBoard)).toBe(2);
+        expect(user.getLongestBlank_Y(0, 5, opponentBoard)).toBe(0);
+
+    });
+
+
     
     // need to export _prevAttackLocation from Player class to enable below tests
     

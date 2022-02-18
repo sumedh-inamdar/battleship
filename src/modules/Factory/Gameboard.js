@@ -27,7 +27,7 @@ export default function Gameboard() {
   }
 
   function getAvailableTargets() {
-      let targets = [];
+      const targets = [];
       for (let i = 0; i < _size; i += 1) {
         for (let j = 0; j < _size; j += 1) {
           if (getState(i, j) === 'blank') targets.push([i, j]);
@@ -64,7 +64,7 @@ export default function Gameboard() {
   }
 
   function getValidShipPlacements(ship, board, isVertical) {
-    let validLocations = [];
+    const validLocations = [];
 
     for (let i = 0; i < 10; i += 1) {
       for (let j = 0; j < 10; j += 1) {
@@ -107,17 +107,17 @@ export default function Gameboard() {
   }
 
   function getBlankNeighbors(x, y) {
-    let _validBlanks = [];
+    const _validBlanks = [];
 
     for (let i = -1; i < 2; i += 2) {
-      let newX = x + i;
-      let newY = y;
+      const newX = x + i;
+      const newY = y;
       if (isValidAttackLoc(newX, newY)) _validBlanks.push([newX, newY]);
     }
 
     for (let i = -1; i < 2; i += 2) {
-      let newX = x;
-      let newY = y + i;
+      const newX = x;
+      const newY = y + i;
       if (isValidAttackLoc(newX, newY)) _validBlanks.push([newX, newY]);
     }
 
@@ -125,7 +125,7 @@ export default function Gameboard() {
   }
 
   function getRandomBlankNeighbor(loc) {
-    let blankNeighbors = getBlankNeighbors(loc[0], loc[1]);
+    const blankNeighbors = getBlankNeighbors(loc[0], loc[1]);
     if (blankNeighbors.length === 0) return [];
     return getRandomItemFromArray(getBlankNeighbors(loc[0], loc[1]));
   }

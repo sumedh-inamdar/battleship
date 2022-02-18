@@ -18,9 +18,9 @@ function _renderShips(board, x, y, locationID) {
 }
 
 export function renderModal(endMsg) {
-  let modal = document.querySelector('.modal');
-  let modalRestart = modal.querySelector('.restartGame');
-  let postModalRestart = document.querySelector('.postModal .restartGame');
+  const modal = document.querySelector('.modal');
+  const modalRestart = modal.querySelector('.restartGame');
+  const postModalRestart = document.querySelector('.postModal .restartGame');
 
   modalRestart.classList.remove('hidden');
   modal.style.display = "flex";
@@ -36,7 +36,7 @@ export function renderModal(endMsg) {
 }
 
 export function removeModal() {
-  let modal = document.querySelector('.modal');
+  const modal = document.querySelector('.modal');
   modal.style.display = "none";
 }
 

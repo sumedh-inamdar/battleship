@@ -5,7 +5,7 @@ import { shipTemplate, userConstants, computerConstants } from '../Constants';
 import { renderGrid, renderBoardTitle, renderBoardStatus, focusBoard, setupShipsSunk, renderModal } from '../DOM/renderDOM';
 import { addClickRestartEL } from "../UI/gamePlay_UI.js";
 
-export let user, computer;
+export let user; export let computer;
 
 function _generateShips(shipInfo) {
     const shipArray = [];
@@ -45,8 +45,8 @@ function _setupDOM(player1, player2) {
 
 export function setupGame() {
 
-    user = Object.assign({}, userConstants);
-    computer = Object.assign({}, computerConstants);
+    user = { ...userConstants};
+    computer = { ...computerConstants};
     
     _setupGameObjects(user, computer, shipTemplate);
     _setupDOM(user, computer);

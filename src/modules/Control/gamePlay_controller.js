@@ -8,7 +8,7 @@ export let blockUserInput;
 
 function _endGame(winner) {
     
-    let endMsg = (winner === user) ?  "You Win! Good job sinking all your opponents ships 😀" : "All your ships were sunk. You lost 🙁";
+    const endMsg = (winner === user) ?  "You Win! Good job sinking all your opponents ships 😀" : "All your ships were sunk. You lost 🙁";
 
     getAllSquares(computer.boardClass).forEach((sq) => removeAllAttackEL(sq));
     renderBoard(user.board, user.boardClass, false);

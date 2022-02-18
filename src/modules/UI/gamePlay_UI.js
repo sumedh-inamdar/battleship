@@ -25,7 +25,7 @@ export function removeAllAttackEL(square) {
 function _handleAttack(event) {
     if (blockUserInput) return;
 
-    let square = event.target.closest('.square');
+    const square = event.target.closest('.square');
     removeAllAttackEL(square);
     removeAllChildren(square);
 

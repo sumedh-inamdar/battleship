@@ -6,20 +6,20 @@ import { addRotateShipEL, addHoverShipPlaceEL, addClickShipPlaceEL } from '../UI
 function _placeShipsRandom(player) {
     player.ships.forEach((ship) => {
     
-      let gen_vert = generateRandBool();
-      let validLocations = player.board.getValidShipPlacements(ship, player.board, gen_vert);
-      let [gen_x, gen_y] = getRandomItemFromArray(validLocations);
+      const gen_vert = generateRandBool();
+      const validLocations = player.board.getValidShipPlacements(ship, player.board, gen_vert);
+      const [gen_x, gen_y] = getRandomItemFromArray(validLocations);
 
       player.board.placeShip(ship, gen_x, gen_y, gen_vert);
     });
 }
 
 export function placeShipsManual(player) {
-    let currentShip = player.ships[player.shipIndex];
-    let currentBoard = player.board;
-    let currentVertical = player.shipVertical;
+    const currentShip = player.ships[player.shipIndex];
+    const currentBoard = player.board;
+    const currentVertical = player.shipVertical;
 
-    let validLocations = player.board.getValidShipPlacements(currentShip, currentBoard, currentVertical);
+    const validLocations = player.board.getValidShipPlacements(currentShip, currentBoard, currentVertical);
 
     addRotateShipEL();
     addHoverShipPlaceEL(player, validLocations); 

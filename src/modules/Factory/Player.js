@@ -17,33 +17,59 @@ export default function Player(name) {
   }
 
   function getLongestBlank_X(x, y, board) {
+    let numBlanks = 0;
+    while (board.isValidAttackLoc(x + numBlanks, y)) {
+      numBlanks++;
+    }
+    return numBlanks;
+  }
 
+  function getLongestBlank_Y(x, y, board) {
+    let numBlanks = 0;
+    while (board.isValidAttackLoc(x, y + numBlanks)) {
+      numBlanks++;
+    }
+    return numBlanks;
   }
 
   function getLongestBlanks(board) {
     let longestBlanks = [];
     let currLongest = 0;
-    let currLength = 0;
-    let start, end;
 
     for (let y = 0; y < 10; y++) {
       for (let x = 0; x < 10; x++) {
-        if (board.getState(x, y) === 'blank') {
-          
+        
+        const lenX = getLongestBlank_X(x, y, board);
+        const lenY = getLongestBlank_Y(x, y, board);
+
+        if (lenX > lenY && lenX >= currLongest) {
+          if (lenX > currLongest) longestBlanks = [];
+          longestBlanks.push([Math.floor(x + lenX/2), y]);
+          currLongest = lenX;
+        
+        } else if (lenY > lenX && lenY >= currLongest) {
+          if (lenY > currLongest) longestBlanks = [];
+          longestBlanks.push([x, Math.floor(y + lenY/2)]);
+          currLongest = lenY;
+        
+        } else if (lenY === lenX && lenX >= currLongest) {
+          if (lenX > currLongest) longestBlanks = [];
+          longestBlanks.push([Math.floor(x + lenX/2), y]);
+          longestBlanks.push([x, Math.floor(y + lenY/2)]);
+          currLongest = lenX;
         }
       }
     }
+
+    return longestBlanks;
   }
 
   function sendAttack_BinarySearch(board) {
-    // find longest segment of 'blank' spaces and add to array
-    // discard any segments shorter than longest
-    let longestBlanks = getLongestBlanks(board); //array of midpoints
-    
-    let [nextX, nextY] = getRandomItemFromArray(longestBlanks);
+    const longestBlanks = getLongestBlanks(board);
+    const [nextX, nextY] = getRandomItemFromArray(longestBlanks);
     const isValidAttack = sendAttack(nextX, nextY, board);
-    return [isValidAttack, [nextX, nextY]];
     
+    return [isValidAttack, [nextX, nextY]];
   }
 
   function sendRandomAttack(board) {
@@ -54,7 +80,7 @@ export default function Player(name) {
   }
 
   function _updatePrevAttackArr(x, y, board) {
-    let currShip = board.getShip(x, y);
+    const currShip = board.getShip(x, y);
 
     if (board.getState(x, y) === 'hit') _prevAttackLocation.push([x, y]); 
 
@@ -64,8 +90,8 @@ export default function Player(name) {
   }
 
   function _getNextAttackLoc([[x1, y1], [x2, y2]]) {
-    let nextX = x1 === x2 ? x1 : x2 + Math.sign(x2 - x1);
-    let nextY = y1 === y2 ? y1 : y2 + Math.sign(y2 - y1);
+    const nextX = x1 === x2 ? x1 : x2 + Math.sign(x2 - x1);
+    const nextY = y1 === y2 ? y1 : y2 + Math.sign(y2 - y1);
 
     return [nextX, nextY];
   }
@@ -73,10 +99,10 @@ export default function Player(name) {
   function _attackNextValidLoc(board) {
     for (let i = 0; i < _prevAttackLocation.length; i++) {
 
-      let loc = _prevAttackLocation[i];
+      const loc = _prevAttackLocation[i];
 
       if (board.getRandomBlankNeighbor(loc).length > 0) {
-        let [nextX, nextY] = board.getRandomBlankNeighbor(loc);
+        const [nextX, nextY] = board.getRandomBlankNeighbor(loc);
         sendAttack(nextX, nextY, board);
 
         if (board.getState(nextX, nextY) === 'hit') {
@@ -91,10 +117,10 @@ export default function Player(name) {
 
   function sendSmartAttack(board) {
 
-    let nextX, nextY;
+    let nextX; let nextY;
  
     if (_prevAttackLocation.length === 0) {
-      [,[nextX, nextY]] = sendRandomAttack(board);
+      [,[nextX, nextY]] = sendAttack_BinarySearch(board);
       
     } else if (_prevAttackLocation.length === 1) {
       [nextX, nextY] = board.getRandomBlankNeighbor(_prevAttackLocation[0]);
@@ -115,5 +141,5 @@ export default function Player(name) {
     return [nextX, nextY];
   }
 
-  return { getName, setName, sendRandomAttack, sendAttack, sendSmartAttack };
+  return { getName, setName, sendRandomAttack, sendAttack, getLongestBlank_X, getLongestBlank_Y, sendSmartAttack };
 }

@@ -26,21 +26,21 @@ function _handleRotate(event) {
 }
 
 function _handleHover(event) {
-    let [x, y] = getXYfromElement(event.target);
-    let currentShip = user.ships[user.shipIndex];
-    let currentBoard = user.board;
-    let currentVertical = user.shipVertical;
+    const [x, y] = getXYfromElement(event.target);
+    const currentShip = user.ships[user.shipIndex];
+    const currentBoard = user.board;
+    const currentVertical = user.shipVertical;
 
-    let arrayCoords = currentBoard.getArrayCoords(currentShip.getLength(), x, y, currentVertical);
-    let arrayCoordElements = getSquareElements(arrayCoords, user);
+    const arrayCoords = currentBoard.getArrayCoords(currentShip.getLength(), x, y, currentVertical);
+    const arrayCoordElements = getSquareElements(arrayCoords, user);
     toggleShip(arrayCoordElements, event);
 }
 
 function _handleClick(event) {
-    let [x, y] = getXYfromElement(event.target);
-    let currentShip = user.ships[user.shipIndex];
-    let currentBoard = user.board;
-    let currentVertical = user.shipVertical;
+    const [x, y] = getXYfromElement(event.target);
+    const currentShip = user.ships[user.shipIndex];
+    const currentBoard = user.board;
+    const currentVertical = user.shipVertical;
 
     currentBoard.placeShip(currentShip, x, y, currentVertical);
     _removeAllShipPlacementEL();
@@ -56,7 +56,7 @@ export function addRotateShipEL() {
 }
 
 export function addHoverShipPlaceEL(player, validLocations) {
-    let validLocElements = getSquareElements(validLocations, player);
+    const validLocElements = getSquareElements(validLocations, player);
     currElementsEL = validLocElements;
 
     validLocElements.forEach((el) => {
@@ -66,7 +66,7 @@ export function addHoverShipPlaceEL(player, validLocations) {
 }
 
 export function addClickShipPlaceEL(player, validLocations) {
-    let validLocElements = getSquareElements(validLocations, player);
+    const validLocElements = getSquareElements(validLocations, player);
 
     validLocElements.forEach((el) => {
         el.addEventListener('click', _handleClick);
