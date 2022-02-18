@@ -92,7 +92,6 @@ describe('Gameboard', () => {
 
     expect(board.getState(0, 2)).toBe('blank');
     expect(board.getState(1, 1)).toBe('blank');
-    expect(board.getShip(0, 0).hitLocation).toEqual([[0, 0], [0, 1]]);
   });
 
   test('attack valid location - miss', () => {
@@ -107,8 +106,6 @@ describe('Gameboard', () => {
 
     expect(board.getState(0, 2)).toBe('blank');
     expect(board.getState(1, 1)).toBe('blank');
-
-    expect(board.getShip(5, 9).hitLocation).toEqual([]);
   });
 
   test('reject attacking invalid location', () => {
@@ -189,4 +186,20 @@ describe('Gameboard', () => {
     expect(board.allSunk()).toBe(false);
     expect(board.getQtySunk()).toBe(0);
   });
+
+  test('returns all blank neighbors', () => {
+    const ship1 = Ship(5);
+    const ship2 = Ship(4);
+
+    board.placeShip(ship1, 5, 5, true);
+    board.placeShip(ship2, 0, 6, true);
+
+    expect(board.getBlankNeighbors(5, 5)).toEqual([[4, 5], [6, 5], [5, 4], [5, 6]]);
+    expect(board.getBlankNeighbors(5, 9)).toEqual([[4, 9], [6, 9], [5, 8]]);
+    expect(board.getBlankNeighbors(0, 9)).toEqual([[1, 9], [0, 8]]);
+
+    board.receiveAttack(1, 9);
+    expect(board.getBlankNeighbors(0, 9)).toEqual([[0, 8]]);
+
+  })
 });

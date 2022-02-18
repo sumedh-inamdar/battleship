@@ -1,4 +1,5 @@
 import { computer, user } from "../Control/setup_controller";
+import { rmUpCaseWhtSpace } from "../Utilities/helper_func";
 import { removeAllChildren } from "./dom_helpers";
 
 function _renderState(board, x, y, locationID) {
@@ -16,9 +17,33 @@ function _renderShips(board, x, y, locationID) {
   else square.classList.remove("ship");
 }
 
-export function renderEndgameMsg(endMsg) {
+export function renderModal(endMsg) {
+  let modal = document.querySelector('.modal');
+  let modalRestart = modal.querySelector('.restartGame');
+  let postModalRestart = document.querySelector('.postModal .restartGame');
+
+  modalRestart.classList.remove('hidden');
+  modal.style.display = "flex";
   document.querySelector('#endGameStatus').textContent = endMsg;
-  document.querySelector("#endGameContainer").classList.remove('hidden');
+  
+  window.onclick = function(event) {
+    if (event.target == modal) {
+      modal.style.display = "none";
+      postModalRestart.classList.remove('hidden');
+    }
+  }
+
+}
+
+export function removeModal() {
+  let modal = document.querySelector('.modal');
+  modal.style.display = "none";
+}
+
+export function removeRestartGame() {
+  document.querySelectorAll('.restartGame').forEach((el) => {
+    el.classList.add('hidden');
+  })
 }
 
 export function focusBoard(boardSide) {
@@ -63,18 +88,30 @@ export function renderBoardStatus(
 
   boardStatusContainer.appendChild(boardStatusDIV);
 }
+export function setupShipsSunk() {
+  document.querySelectorAll('.sunkText, .shipStatus').forEach((el) => {
+    el.classList.add('hidden');
+  });
+  document.querySelectorAll('.shipSunk').forEach((el) => {
+    el.classList.remove('shipSunk');
+  })
+}
 
-export function updateShipsSunk() {
-  renderBoardStatus(
-    computer.boardClass,
-    `${computer.board.getQtySunk()}/5 ships sunk`,
-    "bold"
-  );
-  renderBoardStatus(
-    user.boardClass,
-    `${user.board.getQtySunk()}/5 ships sunk`,
-    "bold"
-  );
+export function renderShipsStatus() {
+  document.querySelectorAll('.shipStatus').forEach((el) => {
+    el.classList.remove('hidden');
+  })
+}
+export function updateShipsSunk(ship, player) {
+  if (ship && ship.isSunk()) {
+    const shipSelector = `.${player.boardClass} .${rmUpCaseWhtSpace(ship.getName())}`;
+    const shipSpan = document.querySelector(shipSelector);
+    shipSpan.classList.add('shipSunk');
+
+    shipSpan.nextElementSibling.classList.remove('hidden');
+
+    renderBoardStatus(player.boardClass, `${ship.getName()} was sunk!`, "bold");
+  }
 }
 
 export function renderBoardXY(board, x, y, boardSide, hideShips) {

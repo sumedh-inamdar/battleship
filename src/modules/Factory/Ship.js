@@ -11,6 +11,10 @@ export default function Ship(length, name) {
   function getName() { 
     return name;
   }
+
+  function getHitLocations() {
+    return _hitLocation;
+  }
   
   function setName(newName) {
     name = newName;
@@ -28,5 +32,5 @@ export default function Ship(length, name) {
     return _hitLocation.length === length;
   }
 
-  return { hit, getName, setName, getLength, setLength, isSunk };
+  return { hit, getName, setName, getLength, setLength, isSunk, getHitLocations };
 }

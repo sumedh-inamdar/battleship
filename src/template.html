@@ -15,18 +15,68 @@
             <div class="boardTitle"></div>
             <div class="board"></div>
             <div class="boardStatus"></div>
+            <div class="shipStatus regular">
+                <div class="shipTitle bold">Friendly ships:</div>
+                <div class="shipLine">
+                    <span class="shipName carrier">Carrier (5)</span>
+                    <span class="sunkText hidden"> SUNK</span>
+                </div>
+                <div class="shipLine">
+                    <span class="shipName battleship">Battleship (4)</span>
+                    <span class="sunkText hidden"> SUNK</span>
+                </div>
+                <div class="shipLine">
+                    <span class="shipName destroyer">Destroyer (3)</span>
+                    <span class="sunkText hidden"> SUNK</span>
+                </div>
+                <div class="shipLine">
+                    <span class="shipName submarine">Submarine (3)</span>
+                    <span class="sunkText hidden"> SUNK</span>
+                </div>
+                <div class="shipLine">
+                    <span class="shipName patrolboat">Patrol Boat (2)</span>
+                    <span class="sunkText hidden"> SUNK</span>
+                </div>
+            </div>
         </div>
         <div class ="rightBoard">
             <div class="boardTitle"></div>
             <div class="board"></div>
             <div class="boardStatus"></div>
+            <div class="shipStatus regular">
+                <div class="shipTitle bold">Enemy ships:</div>
+                <div class="shipLine">
+                    <span class="carrier">Carrier (5)</span>
+                    <span class="sunkText hidden"> SUNK</span>
+                </div>
+                <div class="shipLine">
+                    <span class="battleship">Battleship (4)</span>
+                    <span class="sunkText hidden"> SUNK</span>
+                </div>
+                <div class="shipLine">
+                    <span class="destroyer">Destroyer (3)</span>
+                    <span class="sunkText hidden"> SUNK</span>
+                </div>
+                <div class="shipLine">
+                    <span class="submarine">Submarine (3)</span>
+                    <span class="sunkText hidden"> SUNK</span>
+                </div>
+                <div class="shipLine">
+                    <span class="patrolboat">Patrol Boat (2)</span>
+                    <span class="sunkText hidden"> SUNK</span>
+                </div>
+                
+            </div>
         </div>
     </div>
-    <div id="endGameContainer" class="hidden">
-        <div id="endGameStatus"></div>
-        <button id="restartGame">Play again</button>
+    <div class="modal">
+        <div id="endGameContainer">
+            <div id="endGameStatus"></div>
+            <button class="restartGame hidden">Play again</button>
+        </div>
     </div>
-    
-    
+    <div class="postModal">
+        <button class="restartGame hidden">Play again</button>
+    </div>
 </body>
 </html>

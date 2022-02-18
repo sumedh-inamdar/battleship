@@ -10,7 +10,6 @@ body {
 header>h1 {
     text-align: center;
     font-size: 48px;
-    
 }
 
 .leftBoard, .rightBoard {
@@ -19,9 +18,11 @@ header>h1 {
     margin: 25px;
     padding: 15px;
     border-radius: 15px;
+    max-width: 450px;
 }
 
 .boardTitle {
+    font-size: 24px;
     text-align: center;
 }
 .board {
@@ -39,6 +40,8 @@ header>h1 {
     flex-direction: column;
     justify-content: center;
     text-align: center;
+    height: 40px;
+    font-size: 18px;
 }
 .bold {
     font-weight: 700;
@@ -86,9 +89,46 @@ header>h1 {
 .miss {
     color: white;
 }
+/* Ship Status / Grid */
+.shipStatus {
+    margin-top: 15px;
+    font-size: 14px;
+}
+.shipTitle {
+    margin: 5px 0px;
+}
+.shipName {
+    /* display: block; */
+}
+.shipSunk {
+    color: rgb(11, 84, 145);
+    text-decoration-line:line-through;
+}
+.sunkText {
+    color: red;
+    font-weight: 700;
+}
+
+/* End Game Modal */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4);
+}
 
 #endGameContainer {
     display: flex;
+    background-color: rgba(0, 0, 0, 0.7);
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 60%;
     flex-direction: column;
     align-items: center;
     
@@ -96,7 +136,7 @@ header>h1 {
 #endGameStatus {
     margin: 10px 0px;
 }
-#restartGame {
+.restartGame {
     font-family: inherit;
     color: inherit;
     padding: 5px 10px;
@@ -105,13 +145,18 @@ header>h1 {
     background-color: hsl(0, 0%, 38%);
     box-shadow: 0px 0px 5px 1px rgb(255, 255, 255);
 }
-#restartGame:hover {
+.restartGame:hover {
     cursor: pointer;
     font-weight: 700;
     box-shadow: 0px 0px 5px 2px rgb(255, 255, 255);
 }
 .hidden {
-    visibility: hidden;
+    visibility: collapse;
+    display: none;
+}
+.postModal {
+    display: flex;
+    justify-content: center;
 }
 
 

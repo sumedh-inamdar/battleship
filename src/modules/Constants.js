@@ -7,11 +7,11 @@ export const shipTemplate = [
   ];
 
 export const userConstants = {
-    name: "You",
+    name: "Friendly Seas",
     boardClass: "leftBoard",
 }
 
 export const computerConstants = {
-    name: "Opponent",
+    name: "Enemy Seas",
     boardClass: "rightBoard",
 }

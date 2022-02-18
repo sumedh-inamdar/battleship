@@ -1,3 +1,5 @@
+import { getRandomItemFromArray } from "../Utilities/helper_func";
+
 export default function Gameboard() {
   const _size = 10;
   const _board = [...Array(_size)].map(() => Array(_size));
@@ -35,7 +37,7 @@ export default function Gameboard() {
   }
 
   function getQtySunk() {
-    return _ships.reduce((prev, curr) => prev + (curr.isSunk() ? 1 : 0) , 0);
+    return _ships.reduce((prev, curr) => prev + (curr.isSunk() ? 1 : 0), 0);
   }
 
   function allSunk() {
@@ -46,6 +48,7 @@ export default function Gameboard() {
 
   function getArrayCoords (shipLength, x, y, isVertical) {
     const arrayCoords = [];
+
     for (let i = 0; i < shipLength; i += 1) {
       const newX = x + (isVertical === false ? i : 0);
       const newY = y + (isVertical === true ? i : 0);
@@ -55,10 +58,9 @@ export default function Gameboard() {
   }
 
   function isValidPlacement(shipLength, x, y, isVertical) {
-    const placementCoords = getArrayCoords(shipLength, x, y, isVertical);
 
-    return placementCoords.every((xyCoords) => _coordIsWithinBoard(...xyCoords)
-            && getShip(xyCoords[0], xyCoords[1]) === null);
+    return getArrayCoords(shipLength, x, y, isVertical).every((xyCoords) => 
+      _coordIsWithinBoard(...xyCoords) && getShip(xyCoords[0], xyCoords[1]) === null);
   }
 
   function getValidShipPlacements(ship, board, isVertical) {
@@ -77,18 +79,23 @@ export default function Gameboard() {
 
   function placeShip(ship, x, y, isVertical) {
     if (isValidPlacement(ship.getLength(), x, y, isVertical)) {
+
       getArrayCoords(ship.getLength(), x, y, isVertical).forEach((xyCoords) => 
         _board[xyCoords[0]][xyCoords[1]].ship = ship);
+
       _ships.push(ship);
   
       return true;
     }
     return false;
-  };
+  }
+
+  function isValidAttackLoc(x, y) {
+    return (_coordIsWithinBoard(x, y)) && (getState(x, y) === 'blank');
+  }
 
   function receiveAttack(x, y) {
-    if (!_coordIsWithinBoard(x, y)) return false;
-    if (_board[x][y].state !== 'blank') return false;
+    if (!isValidAttackLoc(x, y)) return false;
 
     if (getShip(x, y) !== null) {
       getShip(x, y).hit([x, y]);
@@ -96,11 +103,34 @@ export default function Gameboard() {
     } else {
       _board[x][y].state = 'miss';
     }
- 
     return true;
-  };
+  }
+
+  function getBlankNeighbors(x, y) {
+    let _validBlanks = [];
+
+    for (let i = -1; i < 2; i += 2) {
+      let newX = x + i;
+      let newY = y;
+      if (isValidAttackLoc(newX, newY)) _validBlanks.push([newX, newY]);
+    }
+
+    for (let i = -1; i < 2; i += 2) {
+      let newX = x;
+      let newY = y + i;
+      if (isValidAttackLoc(newX, newY)) _validBlanks.push([newX, newY]);
+    }
+
+    return _validBlanks;
+  }
+
+  function getRandomBlankNeighbor(loc) {
+    let blankNeighbors = getBlankNeighbors(loc[0], loc[1]);
+    if (blankNeighbors.length === 0) return [];
+    return getRandomItemFromArray(getBlankNeighbors(loc[0], loc[1]));
+  }
 
   return {
-    getState, getShip, getAvailableTargets, getQtySunk, allSunk, getArrayCoords, isValidPlacement, getValidShipPlacements, placeShip, receiveAttack
+    getState, getShip, getAvailableTargets, getQtySunk, allSunk, getArrayCoords, isValidPlacement, getValidShipPlacements, placeShip, isValidAttackLoc, receiveAttack, getBlankNeighbors, getRandomBlankNeighbor
   };
 }

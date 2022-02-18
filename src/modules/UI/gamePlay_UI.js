@@ -3,6 +3,7 @@ import { getAllSquares, getXYfromElement, removeAllChildren } from "../DOM/dom_h
 import crosshair from "../../images/Crosshairs_Red.svg";
 import { userTurn, blockUserInput } from "../Control/gamePlay_controller.js";
 import { initiateShipPlacement } from "../Control/shipPlacement_controller.js";
+import { removeModal, removeRestartGame } from "../DOM/renderDOM.js";
 
 function _loadCrosshair(event) {
     const targetIcon = new Image();
@@ -32,7 +33,8 @@ function _handleAttack(event) {
 }
 
 function _restartGame(event) {
-    document.querySelector('#endGameContainer').classList.add('hidden');
+    removeModal();
+    removeRestartGame();
     setupGame();
     initiateShipPlacement();
 }
@@ -51,5 +53,7 @@ export function addClickAttackEL() {
 }
 
 export function addClickRestartEL() {
-    document.querySelector('#restartGame').addEventListener('click', _restartGame);
+    document.querySelectorAll('.restartGame').forEach((el) => {
+        el.addEventListener('click', _restartGame);
+    })
 }
