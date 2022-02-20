@@ -1,22 +1,20 @@
-import { getRandomItemFromArray } from "../Utilities/helper_func";
+import { getRandomItemFromArray } from '../Utilities/helper-functions';
+import { coordIsWithinBoard, getArrayCoords } from './gameboard-helpers';
 
 export default function Gameboard() {
   const _size = 10;
-  const _board = [...Array(_size)].map(() => Array(_size));
+  // eslint-disable-next-line unicorn/no-new-array
+  const _board = [...new Array(_size)].map(() => new Array(_size));
   const _ships = [];
 
-  for (let i = 0; i < _size; i += 1) {
-    for (let j = 0; j < _size; j += 1) {
-      _board[i][j] = {
-        ship: null, 
+  for (let x = 0; x < _size; x += 1) {
+    for (let y = 0; y < _size; y += 1) {
+      _board[x][y] = {
+        ship: undefined,
         state: 'blank',
       };
     }
   }
-
-  function _coordIsWithinBoard(x, y) {
-    return (x >= 0 && x < _size) && (y >= 0 && y < _size);
-  } 
 
   function getState(x, y) {
     return _board[x][y].state;
@@ -27,17 +25,20 @@ export default function Gameboard() {
   }
 
   function getAvailableTargets() {
-      const targets = [];
-      for (let i = 0; i < _size; i += 1) {
-        for (let j = 0; j < _size; j += 1) {
-          if (getState(i, j) === 'blank') targets.push([i, j]);
-        }
+    const targets = [];
+    for (let x = 0; x < _size; x += 1) {
+      for (let y = 0; y < _size; y += 1) {
+        if (getState(x, y) === 'blank') targets.push([x, y]);
       }
-      return targets;
+    }
+    return targets;
   }
 
   function getQtySunk() {
-    return _ships.reduce((prev, curr) => prev + (curr.isSunk() ? 1 : 0), 0);
+    return _ships.reduce(
+      (previous, current) => previous + (current.isSunk() ? 1 : 0),
+      0
+    );
   }
 
   function allSunk() {
@@ -46,30 +47,21 @@ export default function Gameboard() {
     return _ships.every((ship) => ship.isSunk());
   }
 
-  function getArrayCoords (shipLength, x, y, isVertical) {
-    const arrayCoords = [];
-
-    for (let i = 0; i < shipLength; i += 1) {
-      const newX = x + (isVertical === false ? i : 0);
-      const newY = y + (isVertical === true ? i : 0);
-      arrayCoords.push([newX, newY]);
-    }
-    return arrayCoords; 
-  }
-
   function isValidPlacement(shipLength, x, y, isVertical) {
-
-    return getArrayCoords(shipLength, x, y, isVertical).every((xyCoords) => 
-      _coordIsWithinBoard(...xyCoords) && getShip(xyCoords[0], xyCoords[1]) === null);
+    return getArrayCoords(shipLength, x, y, isVertical).every(
+      (xyCoords) =>
+        coordIsWithinBoard(...xyCoords, _size) &&
+        getShip(...xyCoords) === undefined
+    );
   }
 
-  function getValidShipPlacements(ship, board, isVertical) {
+  function getValidShipPlacements(ship, isVertical) {
     const validLocations = [];
 
-    for (let i = 0; i < 10; i += 1) {
-      for (let j = 0; j < 10; j += 1) {
-        if (isValidPlacement(ship.getLength(), j, i, isVertical)) {
-          validLocations.push([j, i]);
+    for (let y = 0; y < 10; y += 1) {
+      for (let x = 0; x < 10; x += 1) {
+        if (isValidPlacement(ship.getLength(), x, y, isVertical)) {
+          validLocations.push([x, y]);
         }
       }
     }
@@ -79,25 +71,24 @@ export default function Gameboard() {
 
   function placeShip(ship, x, y, isVertical) {
     if (isValidPlacement(ship.getLength(), x, y, isVertical)) {
-
-      getArrayCoords(ship.getLength(), x, y, isVertical).forEach((xyCoords) => 
-        _board[xyCoords[0]][xyCoords[1]].ship = ship);
-
+      getArrayCoords(ship.getLength(), x, y, isVertical).forEach((xyCoords) => {
+        _board[xyCoords[0]][xyCoords[1]].ship = ship;
+      });
       _ships.push(ship);
-  
+
       return true;
     }
     return false;
   }
 
   function isValidAttackLoc(x, y) {
-    return (_coordIsWithinBoard(x, y)) && (getState(x, y) === 'blank');
+    return coordIsWithinBoard(x, y, _size) && getState(x, y) === 'blank';
   }
 
   function receiveAttack(x, y) {
     if (!isValidAttackLoc(x, y)) return false;
 
-    if (getShip(x, y) !== null) {
+    if (getShip(x, y) !== undefined) {
       getShip(x, y).hit([x, y]);
       _board[x][y].state = 'hit';
     } else {
@@ -107,30 +98,53 @@ export default function Gameboard() {
   }
 
   function getBlankNeighbors(x, y) {
-    const _validBlanks = [];
+    return [
+      [x + 1, y],
+      [x - 1, y],
+      [x, y + 1],
+      [x, y - 1],
+    ].filter((neighbor) => isValidAttackLoc(...neighbor));
+    // DELETE IF NO ISSUES
+    // const _validBlanks = [];
 
-    for (let i = -1; i < 2; i += 2) {
-      const newX = x + i;
-      const newY = y;
-      if (isValidAttackLoc(newX, newY)) _validBlanks.push([newX, newY]);
-    }
+    // for (let i = -1; i < 2; i += 2) {
+    //   const newX = x + i;
+    //   const newY = y;
+    //   if (isValidAttackLoc(newX, newY)) _validBlanks.push([newX, newY]);
+    // }
 
-    for (let i = -1; i < 2; i += 2) {
-      const newX = x;
-      const newY = y + i;
-      if (isValidAttackLoc(newX, newY)) _validBlanks.push([newX, newY]);
-    }
+    // for (let i = -1; i < 2; i += 2) {
+    //   const newX = x;
+    //   const newY = y + i;
+    //   if (isValidAttackLoc(newX, newY)) _validBlanks.push([newX, newY]);
+    // }
 
-    return _validBlanks;
+    // return _validBlanks;
   }
 
   function getRandomBlankNeighbor(loc) {
-    const blankNeighbors = getBlankNeighbors(loc[0], loc[1]);
-    if (blankNeighbors.length === 0) return [];
-    return getRandomItemFromArray(getBlankNeighbors(loc[0], loc[1]));
+    // DELETE IF NO ISSUES
+    // const blankNeighbors = getBlankNeighbors(...loc);
+    // if (blankNeighbors.length === 0) return [];
+    // return getRandomItemFromArray(getBlankNeighbors(...loc));
+
+    return getBlankNeighbors(...loc).length === 0
+      ? []
+      : getRandomItemFromArray(getBlankNeighbors(...loc));
   }
 
   return {
-    getState, getShip, getAvailableTargets, getQtySunk, allSunk, getArrayCoords, isValidPlacement, getValidShipPlacements, placeShip, isValidAttackLoc, receiveAttack, getBlankNeighbors, getRandomBlankNeighbor
+    getState,
+    getShip,
+    getAvailableTargets,
+    getQtySunk,
+    allSunk,
+    isValidPlacement,
+    getValidShipPlacements,
+    placeShip,
+    isValidAttackLoc,
+    receiveAttack,
+    getBlankNeighbors,
+    getRandomBlankNeighbor,
   };
 }

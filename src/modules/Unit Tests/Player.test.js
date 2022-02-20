@@ -1,159 +1,138 @@
+import { describe, beforeEach, test, expect } from '@jest/globals';
+import Gameboard from '../Factory/gameboard';
 import {
-    describe, beforeEach, test, expect,
-  } from '@jest/globals';
-import Gameboard from '../Factory/Gameboard';
-import Player from '../Factory/Player';
-import Ship from '../Factory/Ship';
+  getLongestBlankX,
+  getLongestBlankY,
+} from '../Factory/gameboard-helpers';
+import Player from '../Factory/player';
+import { sendRandomAttack } from '../Factory/player-helpers';
+import Ship from '../Factory/ship';
 
 describe('Player', () => {
-    let user;
-    let opponentBoard;
-    let ship;
+  let user;
+  let opponentBoard;
+  let ship;
 
-    beforeEach(() => {    
-        user = Player('user');
-        opponentBoard = Gameboard();
-        ship = Ship(3);
+  beforeEach(() => {
+    user = Player('user');
+    opponentBoard = Gameboard();
+    ship = Ship(3);
 
-        opponentBoard.placeShip(ship, 3, 3, true);
-    });
+    opponentBoard.placeShip(ship, 3, 3, true);
+  });
 
-    test('player init', () => {
-        expect(user.getName()).toBe('user');
-    });
+  test('player init', () => {
+    expect(user.getName()).toBe('user');
+  });
 
-    test('attack', () => {
-        expect(user.sendAttack(3, 3, opponentBoard)).toBe(true);
-        expect(user.sendAttack(2, 3, opponentBoard)).toBe(true);
-        expect(user.sendAttack(2, 3, opponentBoard)).toBe(false);
-        expect(opponentBoard.getState(3, 3)).toBe('hit');
-        expect(opponentBoard.getState(2, 3)).toBe('miss');
-    });
+  test('random attack', () => {
+    for (let iteration = 0; iteration < 100; iteration += 1) {
+      expect(sendRandomAttack(opponentBoard)[0]).toBe(true);
+    }
+    expect(opponentBoard.allSunk()).toBe(true);
+    expect(opponentBoard.getAvailableTargets()).toEqual([]);
+  });
 
-    test('random attack', () => {
-        for (let i = 0; i < 100; i += 1) {
-            expect(user.sendRandomAttack(opponentBoard)[0]).toBe(true);
-        }
-        expect(opponentBoard.allSunk()).toBe(true);
-        expect(opponentBoard.getAvailableTargets()).toEqual([]);
-    });
+  test('get longest blank - blank board', () => {
+    expect(getLongestBlankX(0, 0, opponentBoard)).toBe(10);
+    expect(getLongestBlankX(0, 9, opponentBoard)).toBe(10);
+    expect(getLongestBlankX(9, 0, opponentBoard)).toBe(1);
+    expect(getLongestBlankX(5, 5, opponentBoard)).toBe(5);
 
-    test('sink all ships', () => {
-        expect(user.sendAttack(3, 3, opponentBoard)).toBe(true);
-        expect(user.sendAttack(3, 4, opponentBoard)).toBe(true);
-        expect(user.sendAttack(3, 5, opponentBoard)).toBe(true);
-        expect(ship.isSunk()).toBe(true);
-        expect(opponentBoard.getQtySunk()).toBe(1);
-    });
+    expect(getLongestBlankY(0, 0, opponentBoard)).toBe(10);
+    expect(getLongestBlankY(0, 9, opponentBoard)).toBe(1);
+    expect(getLongestBlankY(9, 0, opponentBoard)).toBe(10);
+    expect(getLongestBlankY(5, 5, opponentBoard)).toBe(5);
+  });
 
-    test('get longest blank - blank board', () => {
-        expect(user.getLongestBlank_X(0, 0, opponentBoard)).toBe(10);
-        expect(user.getLongestBlank_X(0, 9, opponentBoard)).toBe(10);
-        expect(user.getLongestBlank_X(9, 0, opponentBoard)).toBe(1);
-        expect(user.getLongestBlank_X(5, 5, opponentBoard)).toBe(5);
+  test('get longest blank - non-blank board', () => {
+    opponentBoard.receiveAttack(5, 0);
+    expect(getLongestBlankX(0, 0, opponentBoard)).toBe(5);
+    expect(getLongestBlankX(3, 0, opponentBoard)).toBe(2);
+    expect(getLongestBlankX(5, 0, opponentBoard)).toBe(0);
 
-        expect(user.getLongestBlank_Y(0, 0, opponentBoard)).toBe(10);
-        expect(user.getLongestBlank_Y(0, 9, opponentBoard)).toBe(1);
-        expect(user.getLongestBlank_Y(9, 0, opponentBoard)).toBe(10);
-        expect(user.getLongestBlank_Y(5, 5, opponentBoard)).toBe(5);
-    });
+    opponentBoard.receiveAttack(0, 5);
+    expect(getLongestBlankY(0, 0, opponentBoard)).toBe(5);
+    expect(getLongestBlankY(0, 3, opponentBoard)).toBe(2);
+    expect(getLongestBlankY(0, 5, opponentBoard)).toBe(0);
+  });
 
-    test('get longest blank - non-blank board', () => {
-        user.sendAttack(5, 0, opponentBoard);
-        expect(user.getLongestBlank_X(0, 0, opponentBoard)).toBe(5);
-        expect(user.getLongestBlank_X(3, 0, opponentBoard)).toBe(2);
-        expect(user.getLongestBlank_X(5, 0, opponentBoard)).toBe(0);
+  // need to export _prevAttackLocation from Player class to enable below tests
 
-        user.sendAttack(0, 5, opponentBoard);
-        expect(user.getLongestBlank_Y(0, 0, opponentBoard)).toBe(5);
-        expect(user.getLongestBlank_Y(0, 3, opponentBoard)).toBe(2);
-        expect(user.getLongestBlank_Y(0, 5, opponentBoard)).toBe(0);
+  // test('smart attack - happy path (adjacent attack off single hit)', () => {
+  //     sendAttack(3, 3, opponentBoard);
+  //     user._prevAttackLocation.push([3, 3]);
+  //     expect(opponentBoard.getBlankNeighbors(3, 3)).toContainEqual(user.sendSmartAttack(opponentBoard));
+  // });
 
-    });
+  // test('smart attack - happy path (continue attacking in direction of multiple hits)', () => {
+  //     sendAttack(3, 3, opponentBoard);
+  //     user._prevAttackLocation.push([3, 3]);
 
+  //     sendAttack(3, 4, opponentBoard);
+  //     user._prevAttackLocation.push([3, 4]);
 
-    
-    // need to export _prevAttackLocation from Player class to enable below tests
-    
-    // test('smart attack - happy path (adjacent attack off single hit)', () => {
-    //     user.sendAttack(3, 3, opponentBoard);
-    //     user._prevAttackLocation.push([3, 3]);
-    //     expect(opponentBoard.getBlankNeighbors(3, 3)).toContainEqual(user.sendSmartAttack(opponentBoard));
-    // });
+  //     expect(user.sendSmartAttack(opponentBoard)).toEqual([3, 5]);
+  // });
 
-    // test('smart attack - happy path (continue attacking in direction of multiple hits)', () => {
-    //     user.sendAttack(3, 3, opponentBoard);
-    //     user._prevAttackLocation.push([3, 3]);
+  // test('smart attack - reverse upon miss when ship is not sunk', () => {
+  //     sendAttack(3, 4, opponentBoard);
+  //     user._prevAttackLocation.push([3, 4]);
 
-    //     user.sendAttack(3, 4, opponentBoard);
-    //     user._prevAttackLocation.push([3, 4]);
+  //     sendAttack(3, 3, opponentBoard);
+  //     user._prevAttackLocation.push([3, 3]);
 
-    //     expect(user.sendSmartAttack(opponentBoard)).toEqual([3, 5]);
-    // });
+  //     expect(user.sendSmartAttack(opponentBoard)).toEqual([3, 2]);
+  //     expect(user.sendSmartAttack(opponentBoard)).toEqual([3, 5]);
 
-    // test('smart attack - reverse upon miss when ship is not sunk', () => {
-    //     user.sendAttack(3, 4, opponentBoard);
-    //     user._prevAttackLocation.push([3, 4]);
+  // });
 
-    //     user.sendAttack(3, 3, opponentBoard);
-    //     user._prevAttackLocation.push([3, 3]);
+  // test('smart attack - reverse upon board edg)', () => {
+  //     ship = Ship(3);
+  //     opponentBoard.placeShip(ship, 0, 0, true);
 
-    //     expect(user.sendSmartAttack(opponentBoard)).toEqual([3, 2]);
-    //     expect(user.sendSmartAttack(opponentBoard)).toEqual([3, 5]);
+  //     sendAttack(0, 1, opponentBoard);
+  //     user._prevAttackLocation.push([0, 1]);
 
-    // });
+  //     sendAttack(0, 0, opponentBoard);
+  //     user._prevAttackLocation.push([0, 0]);
 
-    // test('smart attack - reverse upon board edg)', () => {
-    //     ship = Ship(3);
-    //     opponentBoard.placeShip(ship, 0, 0, true);
+  //     expect(user.sendSmartAttack(opponentBoard)).toEqual([0, 2]);
+  // });
 
-    //     user.sendAttack(0, 1, opponentBoard);
-    //     user._prevAttackLocation.push([0, 1]);
+  // test('smart attack - two adjacent ships', () => {
+  //     let ship2 = Ship(3);
+  //     opponentBoard.placeShip(ship2, 2, 1, true);
 
-    //     user.sendAttack(0, 0, opponentBoard);
-    //     user._prevAttackLocation.push([0, 0]);
+  //     sendAttack(2, 3, opponentBoard);
+  //     user._prevAttackLocation.push([2, 3]);
 
-    //     expect(user.sendSmartAttack(opponentBoard)).toEqual([0, 2]);
-    // });
+  //     sendAttack(3, 3, opponentBoard);
+  //     user._prevAttackLocation.push([3, 3]);
 
-    // test('smart attack - two adjacent ships', () => {
-    //     let ship2 = Ship(3);
-    //     opponentBoard.placeShip(ship2, 2, 1, true);
+  //     expect(user.sendSmartAttack(opponentBoard)).toEqual([4, 3]);
+  //     expect(user.sendSmartAttack(opponentBoard)).toEqual([1, 3]);
 
-    //     user.sendAttack(2, 3, opponentBoard);
-    //     user._prevAttackLocation.push([2, 3]);
+  //     expect(opponentBoard.getBlankNeighbors(2, 3)).toContainEqual(user.sendSmartAttack(opponentBoard));
+  // });
 
-    //     user.sendAttack(3, 3, opponentBoard);
-    //     user._prevAttackLocation.push([3, 3]);
+  // test('smart attack - three adjacent ships', () => {
+  //     let ship2 = Ship(3)
+  //     opponentBoard.placeShip(ship2, 2, 1, true);
 
-    //     expect(user.sendSmartAttack(opponentBoard)).toEqual([4, 3]);
-    //     expect(user.sendSmartAttack(opponentBoard)).toEqual([1, 3]);
+  //     let ship3 = Ship(4)
+  //     opponentBoard.placeShip(ship3, 1, 2, true);
 
-    //     expect(opponentBoard.getBlankNeighbors(2, 3)).toContainEqual(user.sendSmartAttack(opponentBoard));
-    // });
+  //     sendAttack(2, 3, opponentBoard);
+  //     user._prevAttackLocation.push([2, 3]);
 
-    // test('smart attack - three adjacent ships', () => {
-    //     let ship2 = Ship(3)
-    //     opponentBoard.placeShip(ship2, 2, 1, true);
+  //     sendAttack(3, 3, opponentBoard);
+  //     user._prevAttackLocation.push([3, 3]);
 
-    //     let ship3 = Ship(4)
-    //     opponentBoard.placeShip(ship3, 1, 2, true);
+  //     expect(user.sendSmartAttack(opponentBoard)).toEqual([4, 3]);
+  //     expect(user.sendSmartAttack(opponentBoard)).toEqual([1, 3]);
+  //     expect(user.sendSmartAttack(opponentBoard)).toEqual([0, 3]);
 
-    //     user.sendAttack(2, 3, opponentBoard);
-    //     user._prevAttackLocation.push([2, 3]);
-
-    //     user.sendAttack(3, 3, opponentBoard);
-    //     user._prevAttackLocation.push([3, 3]);
-
-    //     expect(user.sendSmartAttack(opponentBoard)).toEqual([4, 3]);
-    //     expect(user.sendSmartAttack(opponentBoard)).toEqual([1, 3]);
-    //     expect(user.sendSmartAttack(opponentBoard)).toEqual([0, 3]);
-
-    //     expect(opponentBoard.getBlankNeighbors(2, 3)).toContainEqual(user.sendSmartAttack(opponentBoard));
-    // });
-
-
-})
-
-
-  
+  //     expect(opponentBoard.getBlankNeighbors(2, 3)).toContainEqual(user.sendSmartAttack(opponentBoard));
+  // });
+});

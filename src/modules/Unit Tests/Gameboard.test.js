@@ -1,8 +1,6 @@
-import {
-  describe, beforeEach, test, expect,
-} from '@jest/globals';
-import Gameboard from '../Factory/Gameboard';
-import Ship from '../Factory/Ship';
+import { describe, beforeEach, test, expect } from '@jest/globals';
+import Gameboard from '../Factory/gameboard';
+import Ship from '../Factory/ship';
 
 describe('Gameboard', () => {
   let board;
@@ -12,10 +10,10 @@ describe('Gameboard', () => {
   });
 
   test('board successfully created', () => {
-    for (let i = 0; i < 10; i += 1) {
-      for (let j = 0; j < 10; j += 1) {
-        expect(board.getState(i, j)).toBe('blank');
-        expect(board.getShip(i, j)).toBe(null);
+    for (let x = 0; x < 10; x += 1) {
+      for (let y = 0; y < 10; y += 1) {
+        expect(board.getState(x, y)).toBe('blank');
+        expect(board.getShip(x, y)).toBe(undefined);
       }
     }
   });
@@ -194,12 +192,23 @@ describe('Gameboard', () => {
     board.placeShip(ship1, 5, 5, true);
     board.placeShip(ship2, 0, 6, true);
 
-    expect(board.getBlankNeighbors(5, 5)).toEqual([[4, 5], [6, 5], [5, 4], [5, 6]]);
-    expect(board.getBlankNeighbors(5, 9)).toEqual([[4, 9], [6, 9], [5, 8]]);
-    expect(board.getBlankNeighbors(0, 9)).toEqual([[1, 9], [0, 8]]);
+    expect(board.getBlankNeighbors(5, 5)).toEqual([
+      [6, 5],
+      [4, 5],
+      [5, 6],
+      [5, 4],
+    ]);
+    expect(board.getBlankNeighbors(5, 9)).toEqual([
+      [6, 9],
+      [4, 9],
+      [5, 8],
+    ]);
+    expect(board.getBlankNeighbors(0, 9)).toEqual([
+      [1, 9],
+      [0, 8],
+    ]);
 
     board.receiveAttack(1, 9);
     expect(board.getBlankNeighbors(0, 9)).toEqual([[0, 8]]);
-
-  })
+  });
 });

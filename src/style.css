@@ -97,11 +97,8 @@ header>h1 {
 .shipTitle {
     margin: 5px 0px;
 }
-.shipName {
-    /* display: block; */
-}
 .shipSunk {
-    color: rgb(11, 84, 145);
+    color: hsl(207, 86%, 61%);
     text-decoration-line:line-through;
 }
 .sunkText {

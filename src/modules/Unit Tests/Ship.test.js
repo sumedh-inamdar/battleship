@@ -1,7 +1,5 @@
-import {
-  describe, beforeEach, test, expect,
-} from '@jest/globals';
-import Ship from '../Factory/Ship';
+import { describe, beforeEach, test, expect } from '@jest/globals';
+import Ship from '../Factory/ship';
 
 describe('Ship', () => {
   let ship;
@@ -32,5 +30,4 @@ describe('Ship', () => {
     ship.hit([4, 0]);
     expect(ship.isSunk()).toBe(true);
   });
-
 });
