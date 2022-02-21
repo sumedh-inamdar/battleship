@@ -24,7 +24,8 @@ module.exports = {
   devtool: 'inline-source-map',
   plugins: [
     new HtmlWebpackPlugin({
-      title: 'Battle',
+      hash: true,
+      title: 'Battleship',
       template: './src/template.html',
     }),
     new CircularDependencyPlugin({
