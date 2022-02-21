@@ -13,7 +13,7 @@ Factory functions were used (in place of classes) to create Gameboard, Player, a
 
 A computer smart attack algorithm was also developed as described below:
 
-1. Hunting mode: Find the longest stretch of blanks (no attacks) and select one of their midpoints. By breaking the stretch of blanks into smaller chunks, the probabilty of finding a ship increases over firing at random targets (see data below). 
+1. Hunting mode: Find the longest stretch of blanks (no attacks) and select one of their midpoints. By breaking the stretch of blanks into smaller chunks, the probabilty of finding a ship increases over firing at random targets (see data below from 100 simulations / mode). 
 
 ![algorithm performance](./src/images/algorithmPerformance.jpg)
 
