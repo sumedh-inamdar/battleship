@@ -15,7 +15,7 @@ import {
 import initiateShipPlacement from './ship-placement-controller';
 import { user, computer } from '../Data/game-objects';
 
-function _generateShips(shipInfo) {
+export function generateShips(shipInfo) {
   const shipArray = [];
 
   shipInfo.forEach((ship) => {
@@ -32,8 +32,8 @@ function _setupGameObjects(player1, player2, shipInfo) {
   player1.board = Gameboard();
   player2.board = Gameboard();
 
-  player1.ships = _generateShips(shipInfo);
-  player2.ships = _generateShips(shipInfo);
+  player1.ships = generateShips(shipInfo);
+  player2.ships = generateShips(shipInfo);
 }
 
 function _setupDOM(player1, player2) {

@@ -13,7 +13,15 @@ Factory functions were used (in place of classes) to create Gameboard, Player, a
 
 A computer smart attack algorithm was also developed as described below:
 
-1. Hunting mode: Find the longest stretch of blanks (no attacks) and select one of their midpoints. By breaking the stretch of blanks into smaller chunks, the probabilty of finding a ship increases over firing at random targets.
+1. Hunting mode: Find the longest stretch of blanks (no attacks) and select one of their midpoints. By breaking the stretch of blanks into smaller chunks, the probabilty of finding a ship increases over firing at random targets (see data below). 
+
+![algorithm performance](./src/images/algorithmPerformance.jpg)
+
+| # of hits to sink all ships| Smart Hunting |Random Hunting | Random Attack |
+| ----------- | ----------- |----------- |----------- |
+| Mean      | 52.8|59.17|95.62|
+| Median   | 50|55.5|97|
+| Std Dev   | 13.37|15.32|4.58|
 
 2. Targeting mode: Once a ship has been hit, the adjacent blank spaces are randomly selected as the next target until a second hit is registered. Hits are then selected along the linear path of the first and second hit until the ship is sunk or a blank space is found, after which the linear path is reversed and hits commence on the first blank space in the reverse order. If no valid attack location is available, hits commence on the adjacent locations of any previous logged hits which did not result in a sunk ship. 
 

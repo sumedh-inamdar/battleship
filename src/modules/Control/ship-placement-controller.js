@@ -15,7 +15,7 @@ import startGame from './gameplay-controller';
 
 let currentElementsWithEL;
 
-function _placeShipsRandom(player) {
+export function placeShipsRandom(player) {
   player.ships.forEach((ship) => {
     const nextVert = generateRandBool();
     const validLocations = player.board.getValidShipPlacements(ship, nextVert);
@@ -126,6 +126,6 @@ export default function initiateShipPlacement() {
   user.shipVertical = true;
   user.shipIndex = 0;
 
-  _placeShipsRandom(computer);
+  placeShipsRandom(computer);
   _placeShipsManual(user);
 }

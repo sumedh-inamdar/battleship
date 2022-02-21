@@ -1,5 +1,9 @@
 import { removeArrayfromNestedArray } from '../Utilities/helper-functions';
-import { getNextLinearAttack, sendLongestBlankAttack } from './player-helpers';
+import {
+  getNextLinearAttack,
+  sendLongestBlankAttack,
+  sendRandomAttack,
+} from './player-helpers';
 
 export default function Player(name) {
   let _name = name;
@@ -44,12 +48,14 @@ export default function Player(name) {
     return sendLongestBlankAttack(board)[1];
   }
 
-  function sendSmartAttack(board) {
+  function sendSmartAttack(board, hunting = 'smart') {
     let nextX;
     let nextY;
 
     if (_previousHits.length === 0) {
-      [, [nextX, nextY]] = sendLongestBlankAttack(board);
+      if (hunting === 'smart')
+        [, [nextX, nextY]] = sendLongestBlankAttack(board);
+      else [, [nextX, nextY]] = sendRandomAttack(board);
     } else if (_previousHits.length === 1) {
       [nextX, nextY] = board.getRandomBlankNeighbor(_previousHits[0]);
       board.receiveAttack(nextX, nextY);
