@@ -47,12 +47,12 @@ function _setupDOM(player1, player2) {
   renderBoardStatus(player2.boardClass, '', 'bold');
 
   setupShipsSunk();
-  addClickRestartEL();
+  _addClickRestartEL();
 
   focusBoard(player1.boardClass);
 }
 
-function addClickRestartEL() {
+function _addClickRestartEL() {
   document.querySelectorAll('.restartGame').forEach((element) => {
     element.addEventListener('click', _restartGame);
   });

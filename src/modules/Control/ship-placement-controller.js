@@ -55,7 +55,7 @@ function _handleRotate(event) {
     user.shipVertical = !user.shipVertical;
     _removeAllShipPlacementEL();
     renderBoard(user.board, user.boardClass, false);
-    placeShipsManual(user);
+    _placeShipsManual(user);
   }
 }
 
@@ -70,15 +70,15 @@ function _handleClick(event) {
   renderBoard(currentBoard, user.boardClass, false);
   user.shipIndex += 1;
 
-  if (user.ships[user.shipIndex] !== undefined) placeShipsManual(user);
+  if (user.ships[user.shipIndex] !== undefined) _placeShipsManual(user);
   else startGame();
 }
 
-function addRotateShipEL() {
+function _addRotateShipEL() {
   document.addEventListener('keydown', _handleRotate);
 }
 
-function addHoverShipPlaceEL(player, validLocations) {
+function _addHoverShipPlaceEL(player, validLocations) {
   const validLocElements = getSquareElements(validLocations, player);
   currentElementsWithEL = validLocElements;
 
@@ -88,7 +88,7 @@ function addHoverShipPlaceEL(player, validLocations) {
   });
 }
 
-function addClickShipPlaceEL(player, validLocations) {
+function _addClickShipPlaceEL(player, validLocations) {
   const validLocElements = getSquareElements(validLocations, player);
 
   validLocElements.forEach((element) => {
@@ -96,7 +96,7 @@ function addClickShipPlaceEL(player, validLocations) {
   });
 }
 
-function placeShipsManual(player) {
+function _placeShipsManual(player) {
   const currentShip = player.ships[player.shipIndex];
   const currentVertical = player.shipVertical;
 
@@ -105,9 +105,9 @@ function placeShipsManual(player) {
     currentVertical
   );
 
-  addRotateShipEL();
-  addHoverShipPlaceEL(player, validLocations);
-  addClickShipPlaceEL(player, validLocations);
+  _addRotateShipEL();
+  _addHoverShipPlaceEL(player, validLocations);
+  _addClickShipPlaceEL(player, validLocations);
 
   renderBoardStatus(
     player.boardClass,
@@ -127,5 +127,5 @@ export default function initiateShipPlacement() {
   user.shipIndex = 0;
 
   _placeShipsRandom(computer);
-  placeShipsManual(user);
+  _placeShipsManual(user);
 }

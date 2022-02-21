@@ -104,30 +104,9 @@ export default function Gameboard() {
       [x, y + 1],
       [x, y - 1],
     ].filter((neighbor) => isValidAttackLoc(...neighbor));
-    // DELETE IF NO ISSUES
-    // const _validBlanks = [];
-
-    // for (let i = -1; i < 2; i += 2) {
-    //   const newX = x + i;
-    //   const newY = y;
-    //   if (isValidAttackLoc(newX, newY)) _validBlanks.push([newX, newY]);
-    // }
-
-    // for (let i = -1; i < 2; i += 2) {
-    //   const newX = x;
-    //   const newY = y + i;
-    //   if (isValidAttackLoc(newX, newY)) _validBlanks.push([newX, newY]);
-    // }
-
-    // return _validBlanks;
   }
 
   function getRandomBlankNeighbor(loc) {
-    // DELETE IF NO ISSUES
-    // const blankNeighbors = getBlankNeighbors(...loc);
-    // if (blankNeighbors.length === 0) return [];
-    // return getRandomItemFromArray(getBlankNeighbors(...loc));
-
     return getBlankNeighbors(...loc).length === 0
       ? []
       : getRandomItemFromArray(getBlankNeighbors(...loc));
