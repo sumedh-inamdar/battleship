@@ -7,7 +7,7 @@ Classic Battleship game where users place ships and take turns placing attacks o
 
 JS modules were designed to be loosely coupled and employ pure functions as much as possible. The control modules were subdivided by each phase of the game (setup, ship placement, gameplay). DOM rendering modules were kept seperate with their sole resposibility to handle updating / rendering the DOM. 
 
-Factory functions were used (in place of classes) to create Gameboard, Player, and Ship objects. The factory functions were created through a test driven development (TDD) methodology with thorough unit testing prior to control / DOM module development.
+Factory functions were used (in place of classes) to create Gameboard, Player, and Ship objects. The factory functions were created through a test driven development (TDD) methodology with unit tests generated prior to control / DOM module development.
 
 ## Computer AI algorithm
 
